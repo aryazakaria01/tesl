@@ -230,8 +230,9 @@ def ungban(update: Update, context: CallbackContext):
     banner = update.effective_user
 
     message.reply_text(
-        "I'll give {} a second chance, globally.".format(user_chat.first_name)
+        f"I'll give {user_chat.first_name} a second chance, globally."
     )
+
 
     context.bot.sendMessage(
         EVENT_LOGS,
@@ -263,10 +264,8 @@ def ungban(update: Update, context: CallbackContext):
 
         except BadRequest as excp:
             if excp.message not in UNGBAN_ERRORS:
-                message.reply_text("Could not un-gban due to: {}".format(excp.message))
-                context.bot.send_message(
-                    OWNER_ID, "Could not un-gban due to: {}".format(excp.message)
-                )
+                message.reply_text(f"Could not un-gban due to: {excp.message}")
+                context.bot.send_message(OWNER_ID, f"Could not un-gban due to: {excp.message}")
                 return
         except TelegramError:
             pass
@@ -275,11 +274,10 @@ def ungban(update: Update, context: CallbackContext):
 
     context.bot.sendMessage(
         EVENT_LOGS,
-        "User {} has been successfully un-gbanned!".format(
-            mention_html(user_chat.id, user_chat.first_name)
-        ),
+        f"User {mention_html(user_chat.id, user_chat.first_name)} has been successfully un-gbanned!",
         parse_mode=ParseMode.HTML,
     )
+
     message.reply_text("Person has been un-gbanned.")
 
 
@@ -310,8 +308,7 @@ def gbanlist(update, _):
 
 def check_and_ban(update, user_id, should_message=True):
     try:
-        spmban = sw.get_ban(int(user_id))
-        if spmban:
+        if spmban := sw.get_ban(int(user_id)):
             update.effective_chat.ban_member(user_id)
             if should_message:
                 update.effective_message.reply_text(
@@ -392,7 +389,7 @@ def gbanstat(update: Update, context: CallbackContext):
 
 
 def __stats__():
-    return "× {} gbanned users.".format(sql.num_gbanned_users())
+    return f"× {sql.num_gbanned_users()} gbanned users."
 
 
 def __user_info__(user_id):
@@ -418,7 +415,7 @@ def __migrate__(old_chat_id, new_chat_id):
 
 
 def __chat_settings__(chat_id, _):
-    return "This chat is enforcing *gbans*: `{}`.".format(sql.does_chat_gban(chat_id))
+    return f"This chat is enforcing *gbans*: `{sql.does_chat_gban(chat_id)}`."
 
 
 __help__ = """
