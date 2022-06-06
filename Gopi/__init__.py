@@ -43,26 +43,26 @@ if ENV:
     OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
 
     try:
-        DRAGONS = set(int(x) for x in os.environ.get("DRAGONS", "").split())
-        DEV_USERS = set(int(x) for x in os.environ.get("DEV_USERS", "").split())
+        DRAGONS = {int(x) for x in os.environ.get("DRAGONS", "").split()}
+        DEV_USERS = {int(x) for x in os.environ.get("DEV_USERS", "").split()}
     except ValueError:
         raise Exception(
             "Your sudo or dev users list does not contain valid integers.")
 
     try:
-        DEMONS = set(int(x) for x in os.environ.get("DEMONS", "").split())
+        DEMONS = {int(x) for x in os.environ.get("DEMONS", "").split()}
     except ValueError:
         raise Exception(
             "Your support users list does not contain valid integers.")
 
     try:
-        WOLVES = set(int(x) for x in os.environ.get("WOLVES", "").split())
+        WOLVES = {int(x) for x in os.environ.get("WOLVES", "").split()}
     except ValueError:
         raise Exception(
             "Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGERS = set(int(x) for x in os.environ.get("TIGERS", "").split())
+        TIGERS = {int(x) for x in os.environ.get("TIGERS", "").split()}
     except ValueError:
         raise Exception(
             "Your tiger users list does not contain valid integers.")
@@ -111,7 +111,7 @@ if ENV:
     LOG_GROUP_ID = os.environ.get('LOG_GROUP_ID', None)
 
     try:
-        BL_CHATS = set(int(x) for x in os.environ.get('BL_CHATS', "").split())
+        BL_CHATS = {int(x) for x in os.environ.get('BL_CHATS', "").split()}
     except ValueError:
         raise Exception(
             "Your blacklisted chats list does not contain valid integers.")
@@ -129,26 +129,26 @@ else:
     OWNER_USERNAME = Config.OWNER_USERNAME
 
     try:
-        DRAGONS = set(int(x) for x in Config.DRAGONS or [])
-        DEV_USERS = set(int(x) for x in Config.DEV_USERS or [])
+        DRAGONS = {int(x) for x in Config.DRAGONS or []}
+        DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
     except ValueError:
         raise Exception(
             "Your sudo or dev users list does not contain valid integers.")
 
     try:
-        DEMONS = set(int(x) for x in Config.DEMONS or [])
+        DEMONS = {int(x) for x in Config.DEMONS or []}
     except ValueError:
         raise Exception(
             "Your support users list does not contain valid integers.")
 
     try:
-        WOLVES = set(int(x) for x in Config.WOLVES or [])
+        WOLVES = {int(x) for x in Config.WOLVES or []}
     except ValueError:
         raise Exception(
             "Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGERS = set(int(x) for x in Config.TIGERS or [])
+        TIGERS = {int(x) for x in Config.TIGERS or []}
     except ValueError:
         raise Exception(
             "Your tiger users list does not contain valid integers.")
@@ -164,7 +164,7 @@ else:
 
     DB_URI = Config.SQLALCHEMY_DATABASE_URI
     FED_USERNAME = Config.FED_USERNAME
-    MONGO_DB_URI = Config.MONGO_DB_URI 
+    MONGO_DB_URI = Config.MONGO_DB_URI
     DONATION_LINK = Config.DONATION_LINK
     LOAD = Config.LOAD
     INFOPIC = Config.INFOPIC
@@ -187,7 +187,7 @@ else:
     SPAMWATCH_API = Config.SPAMWATCH_API
 
     try:
-        BL_CHATS = set(int(x) for x in Config.BL_CHATS or [])
+        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
     except ValueError:
         raise Exception(
             "Your blacklisted chats list does not contain valid integers.")
@@ -200,10 +200,10 @@ if not SPAMWATCH_API:
     LOGGER.warning("SpamWatch API key missing! recheck your config.")
 else:
     sw = spamwatch.Client(SPAMWATCH_API)
-    
+
 #install aiohttp session
 print("[Robot]: Initializing AIOHTTP Session")
-aiohttpsession = ClientSession() 
+aiohttpsession = ClientSession()
 arq = ARQ("https://thearq.tech", "GKNOHX-UDSREJ-AWTSGO-XFDSCY-ARQ", aiohttpsession)
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 telethn = TelegramClient("KURUMIBOT", API_ID, API_HASH)

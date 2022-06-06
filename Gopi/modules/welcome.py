@@ -82,13 +82,7 @@ def send(update, message, keyboard, backup_message):
             reply_to_message_id=reply,
         )
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
-            msg = update.effective_message.reply_text(
-                message,
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=keyboard,
-                quote=False)
-        elif excp.message == "Button_url_invalid":
+        if excp.message == "Button_url_invalid":
             msg = update.effective_message.reply_text(
                 markdown_parser(
                     backup_message +
@@ -97,6 +91,14 @@ def send(update, message, keyboard, backup_message):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
+        elif excp.message == "Have no rights to send a message":
+            return
+        elif excp.message == "Reply message not found":
+            msg = update.effective_message.reply_text(
+                message,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=keyboard,
+                quote=False)
         elif excp.message == "Unsupported url protocol":
             msg = update.effective_message.reply_text(
                 markdown_parser(backup_message +
@@ -118,8 +120,6 @@ def send(update, message, keyboard, backup_message):
             LOGGER.warning(message)
             LOGGER.warning(keyboard)
             LOGGER.exception("Could not parse! got invalid url host errors")
-        elif excp.message == "Have no rights to send a message":
-            return
         else:
             msg = update.effective_message.reply_text(
                 markdown_parser(backup_message +
